@@ -212,17 +212,17 @@ function renderTables() {
         drinkTable.className = 'drink-table';
         drinkTable.style.display = table.isFoodTableVisible ? 'none' : 'table';
         
-        const drinkTableHead = document.createElement('thead');
+        const drinkHead = document.createElement('thead');
         const drinkHeaderRow = document.createElement('tr');
         drinkHeaderRow.innerHTML = `
             <th>Bebida</th>
             <th>Cantidad</th>
         `;
-        drinkTableHead.appendChild(drinkHeaderRow);
-        drinkTable.appendChild(drinkTableHead);
+        drinkHead.appendChild(drinkHeaderRow);
+        drinkTable.appendChild(drinkHead);
         
-        const drinkTableBody = document.createElement('tbody');
-        const drinks = ['Cerveza', 'Vino Tinto', 'Vino Blanco', 'Refresco', 'Agua'];
+        const drinkBody = document.createElement('tbody');
+        const drinks = ['Refresco', 'Cerveza', 'Tinto', 'Agua', 'Café', 'Vino'];
         
         drinks.forEach(drinkName => {
             const drinkRow = document.createElement('tr');
@@ -232,26 +232,26 @@ function renderTables() {
             drinkRow.appendChild(drinkNameCell);
             
             const drink = table.drinks.find(order => order.name === drinkName);
-            const quantity = drink ? drink.quantity : 0;
+            const drinkQuantity = drink ? drink.quantity : 0;
             
-            const quantityCell = document.createElement('td');
-            quantityCell.innerHTML = `
-                <span>${quantity}</span>
+            const drinkQuantityCell = document.createElement('td');
+            drinkQuantityCell.innerHTML = `
+                <span>${drinkQuantity}</span>
                 <button onclick="addDrink('${tableId}', '${drinkName}')">+</button>
                 <button onclick="removeDrink('${tableId}', '${drinkName}')">-</button>
             `;
-            drinkRow.appendChild(quantityCell);
+            drinkRow.appendChild(drinkQuantityCell);
             
-            drinkTableBody.appendChild(drinkRow);
+            drinkBody.appendChild(drinkRow);
         });
         
-        drinkTable.appendChild(drinkTableBody);
+        drinkTable.appendChild(drinkBody);
         tableElement.appendChild(drinkTable);
         
-        const total = document.createElement('div');
-        total.className = 'total';
-        total.textContent = `Precio: ${table.total}€`;
-        tableElement.appendChild(total);
+        const totalElement = document.createElement('div');
+        totalElement.className = 'table-total';
+        totalElement.textContent = `Total: €${table.total.toFixed(2)}`;
+        tableElement.appendChild(totalElement);
         
         const finalizeButton = document.createElement('button');
         finalizeButton.textContent = 'Terminar Mesa';
