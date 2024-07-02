@@ -112,20 +112,11 @@ function saveTableData(tableData) {
     const foodSheet = XLSX.utils.json_to_sheet(foodOrders);
     const drinkSheet = XLSX.utils.json_to_sheet(drinkOrders);
 
-    XLSX.utils.sheet_add_aoa(foodSheet, total, { origin: -1 });
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, foodSheet, 'Comida');
     XLSX.utils.book_append_sheet(workbook, drinkSheet, 'Bebidas');
 
-    const workbookBlob = XLSX.write(workbook, { bookType: 'xlsx', type: 'blob' });
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(workbookBlob);
-    a.download = `mesa-${tableData.number}.xlsx`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    XLSX.writeFile(workbook, `mesa-${tableData.number}.xlsx`);
 }
 
 function toggleTable(tableId) {
