@@ -4,21 +4,14 @@ let tableCounter = 0;
 
 function login() {
     const usernameInput = document.getElementById('username');
-    currentUser = usernameInput.value.trim(); // Trim para eliminar espacios en blanco al inicio y final del nombre
+    currentUser = usernameInput.value;
     if (currentUser) {
         document.getElementById('login').style.display = 'none';
         document.getElementById('main').style.display = 'block';
-    } else {
-        alert('Por favor, introduce un nombre de usuario válido.');
     }
 }
 
 function addTable() {
-    if (!currentUser) {
-        alert('Inicia sesión para añadir una mesa.');
-        return;
-    }
-    
     const tableId = `table-${Date.now()}`;
     tableCounter += 1;
     tables[tableId] = {
@@ -98,9 +91,27 @@ function finalizeTable(tableId) {
 }
 
 function saveTableData(tableData) {
-    // Simulación de una solicitud POST para guardar los datos de la mesa
-    console.log('Guardando datos de la mesa:', tableData);
-    alert('Datos de la mesa guardados exitosamente.');
+    fetch('http://localhost:3000/save-table', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tableData }),
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `table-${tableData.number}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        console.error('Error saving table data:', error);
+    });
 }
 
 function toggleTable(tableId) {
@@ -112,12 +123,11 @@ function toggleTable(tableId) {
 function renderTables() {
     const tablesContainer = document.getElementById('tables');
     tablesContainer.innerHTML = '';
-
     for (const [tableId, table] of Object.entries(tables)) {
         const tableElement = document.createElement('div');
         tableElement.className = 'table';
         tableElement.id = tableId;
-
+        
         const tableHeader = document.createElement('h2');
         tableHeader.textContent = `Mesa de ${table.user}`;
         tableElement.appendChild(tableHeader);
@@ -126,7 +136,7 @@ function renderTables() {
         tableNumber.className = 'table-number';
         tableNumber.textContent = `Mesa ${table.number}`;
         tableElement.appendChild(tableNumber);
-
+        
         const toggleButton = document.createElement('button');
         toggleButton.textContent = 'Alternar entre Comida y Bebida';
         toggleButton.onclick = (event) => {
@@ -134,11 +144,11 @@ function renderTables() {
             toggleTable(tableId);
         };
         tableElement.appendChild(toggleButton);
-
+        
         const foodTable = document.createElement('table');
         foodTable.className = 'dish-table food-table';
         foodTable.style.display = table.isFoodTableVisible ? 'table' : 'none';
-
+        
         const tableHead = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
@@ -148,21 +158,21 @@ function renderTables() {
         `;
         tableHead.appendChild(headerRow);
         foodTable.appendChild(tableHead);
-
+        
         const tableBody = document.createElement('tbody');
         const dishes = ['Boquerones', 'Bacalailla', 'Gambas PL', 'Sardinas', 'Puntillitas', 'Bacalao'];
-
+        
         dishes.forEach(dishName => {
             const dishRow = document.createElement('tr');
-
+            
             const dishNameCell = document.createElement('td');
             dishNameCell.textContent = dishName;
             dishRow.appendChild(dishNameCell);
-
+            
             const dishWhole = table.orders.find(order => order.name === dishName);
             const wholeQuantity = dishWhole ? dishWhole.whole : 0;
             const halfQuantity = dishWhole ? dishWhole.half : 0;
-
+            
             const wholeCell = document.createElement('td');
             wholeCell.innerHTML = `
                 <span>${wholeQuantity}</span>
@@ -170,7 +180,7 @@ function renderTables() {
                 <button onclick="removeDish('${tableId}', '${dishName}', 'whole')">-</button>
             `;
             dishRow.appendChild(wholeCell);
-
+            
             const halfCell = document.createElement('td');
             halfCell.innerHTML = `
                 <span>${halfQuantity}</span>
@@ -178,17 +188,17 @@ function renderTables() {
                 <button onclick="removeDish('${tableId}', '${dishName}', 'half')">-</button>
             `;
             dishRow.appendChild(halfCell);
-
+            
             tableBody.appendChild(dishRow);
         });
-
+        
         foodTable.appendChild(tableBody);
         tableElement.appendChild(foodTable);
-
+        
         const drinkTable = document.createElement('table');
         drinkTable.className = 'drink-table';
         drinkTable.style.display = table.isFoodTableVisible ? 'none' : 'table';
-
+        
         const drinkTableHead = document.createElement('thead');
         const drinkHeaderRow = document.createElement('tr');
         drinkHeaderRow.innerHTML = `
@@ -197,20 +207,20 @@ function renderTables() {
         `;
         drinkTableHead.appendChild(drinkHeaderRow);
         drinkTable.appendChild(drinkTableHead);
-
+        
         const drinkTableBody = document.createElement('tbody');
         const drinks = ['Cerveza', 'Vino Tinto', 'Vino Blanco', 'Refresco', 'Agua'];
-
+        
         drinks.forEach(drinkName => {
             const drinkRow = document.createElement('tr');
-
+            
             const drinkNameCell = document.createElement('td');
             drinkNameCell.textContent = drinkName;
             drinkRow.appendChild(drinkNameCell);
-
+            
             const drink = table.drinks.find(order => order.name === drinkName);
             const quantity = drink ? drink.quantity : 0;
-
+            
             const quantityCell = document.createElement('td');
             quantityCell.innerHTML = `
                 <span>${quantity}</span>
@@ -218,23 +228,23 @@ function renderTables() {
                 <button onclick="removeDrink('${tableId}', '${drinkName}')">-</button>
             `;
             drinkRow.appendChild(quantityCell);
-
+            
             drinkTableBody.appendChild(drinkRow);
         });
-
+        
         drinkTable.appendChild(drinkTableBody);
         tableElement.appendChild(drinkTable);
-
+        
         const total = document.createElement('div');
         total.className = 'total';
         total.textContent = `Precio: ${table.total}€`;
         tableElement.appendChild(total);
-
+        
         const finalizeButton = document.createElement('button');
         finalizeButton.textContent = 'Terminar Mesa';
         finalizeButton.onclick = () => finalizeTable(tableId);
         tableElement.appendChild(finalizeButton);
-
+        
         tablesContainer.appendChild(tableElement);
     }
 }
