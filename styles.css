@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    padding: 20px;
+}
+
+#login, #main {
+    max-width: 800px;
+    margin: auto;
+}
+
+.table {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table h2 {
+    margin-top: 0;
+}
+
+.table-number {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.table-footer {
+    margin-top: 10px;
+}
+
+.total {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+button {
+    margin: 5px;
+}
+
+.dish-table, .drink-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.dish-table th, .drink-table th, .dish-table td, .drink-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .table {
+        display: inline-block;
+        width: calc(33.3333% - 20px);
+        vertical-align: top;
+    }
+}
+ 
