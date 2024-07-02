@@ -1,47 +1,23 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comedero Digital</title>
+    <title>Comedero de Bar Digital</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Comedero Digital</h1>
-        <div id="login">
-            <input type="text" id="username" placeholder="Nombre de usuario">
-            <button onclick="login()">Conectar</button>
-        </div>
-        <div id="main" style="display: none;">
-            <button onclick="addTable()">Añadir Mesa</button>
-            <div id="tables"></div>
-        </div>
+    <div id="login">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Nombre de usuario">
+        <button onclick="login()">Entrar</button>
     </div>
-
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBca44YYGutzi03UOi0Ca5Ecn1vylbLySk",
-    authDomain: "prueba-bar23.firebaseapp.com",
-    projectId: "prueba-bar23",
-    storageBucket: "prueba-bar23.appspot.com",
-    messagingSenderId: "827299398215",
-    appId: "1:827299398215:web:5edc46000c68618b14e762",
-    measurementId: "G-6GY1B1MTS7"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+    <div id="main" style="display:none;">
+        <h2>Bienvenido, <span id="user"></span></h2>
+        <button onclick="addTable()">Añadir Mesa</button>
+        <div id="tables"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
