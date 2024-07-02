@@ -8,6 +8,7 @@ function login() {
     if (currentUser) {
         document.getElementById('login').style.display = 'none';
         document.getElementById('main').style.display = 'block';
+        document.getElementById('user').textContent = currentUser;
     }
 }
 
@@ -91,27 +92,39 @@ function finalizeTable(tableId) {
 }
 
 function saveTableData(tableData) {
-    fetch('http://localhost:3000/save-table', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tableData }),
-    })
-    .then(response => response.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `table-${tableData.number}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-        console.error('Error saving table data:', error);
-    });
+    const foodOrders = tableData.orders.map(order => ({
+        'Plato': order.name,
+        'Cantidad Entera': order.whole,
+        'Cantidad Media': order.half,
+        'Precio Unitario': 6,
+        'Precio Medio': 4
+    }));
+
+    const drinkOrders = tableData.drinks.map(drink => ({
+        'Bebida': drink.name,
+        'Cantidad': drink.quantity,
+        'Precio Unitario': (drink.name === 'Refresco' || drink.name === 'Agua') ? 1.5 : 2
+    }));
+
+    const total = [['', '', '', 'Total:', tableData.total]];
+
+    const foodSheet = XLSX.utils.json_to_sheet(foodOrders);
+    const drinkSheet = XLSX.utils.json_to_sheet(drinkOrders);
+
+    XLSX.utils.sheet_add_aoa(foodSheet, total, { origin: -1 });
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, foodSheet, 'Comida');
+    XLSX.utils.book_append_sheet(workbook, drinkSheet, 'Bebidas');
+
+    const workbookBlob = XLSX.write(workbook, { bookType: 'xlsx', type: 'blob' });
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(workbookBlob);
+    a.download = `mesa-${tableData.number}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function toggleTable(tableId) {
