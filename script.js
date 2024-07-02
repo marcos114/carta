@@ -32,8 +32,9 @@ function addDish(tableId, dishName, quantityType) {
     if (dish) {
         dish[quantityType] += 1;
     } else {
-        table.orders.push({ name: dishName, whole: 0, half: 0 });
-        table.orders.find(order => order.name === dishName)[quantityType] += 1;
+        const newDish = { name: dishName, whole: 0, half: 0 };
+        newDish[quantityType] = 1;
+        table.orders.push(newDish);
     }
     calculateTotal(tableId);
     renderTables();
@@ -261,3 +262,4 @@ function renderTables() {
         tablesContainer.appendChild(tableElement);
     }
 }
+
