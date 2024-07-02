@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://cdnjs.cloudflare.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table Management System</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
-
+    <title>Gestión de Mesas</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <div id="login">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Enter your name">
-        <button onclick="login()">Login</button>
+        <input type="text" id="username" placeholder="Nombre de usuario">
+        <button onclick="login()">Iniciar Sesión</button>
     </div>
-    <div id="main" style="display: none;">
-        <h2>Welcome, <span id="user"></span></h2>
-        <button onclick="addTable()">Add Table</button>
+    <div id="main" style="display:none;">
+        <h1>Bienvenido, <span id="user"></span></h1>
+        <button onclick="addTable()">Agregar Mesa</button>
         <div id="tables"></div>
     </div>
-        <script defer src="script.js"></script>
 </body>
 </html>
