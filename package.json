@@ -1,0 +1,13 @@
+{
+  "name": "carta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simulador de batallas Pokemon todos contra todos",
+  "type": "commonjs",
+  "scripts": {
+    "pokemon:sim": "node pokemon_battle_sim.js"
+  },
+  "dependencies": {
+    "pokemon-showdown": "^0.11.10"
+  }
+}
